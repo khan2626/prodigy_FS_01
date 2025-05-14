@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 
 const Signup = ()=>{
@@ -7,10 +8,22 @@ const Signup = ()=>{
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [loading, setLoading] = useState("")
+
+    const navigate = useNavigate()
 
     const handleSubmit = async (e)=>{
         e.preventDefault()
         try {
+            const resp = await axios.post('http://localhost:8001/api/signup', {name, email, password})
+            if (resp.data.message.includes("successful")){
+                alert(resp.data.message)
+                navigate("/login")
+                setName("")
+                setEmail("")
+                setPassword("")
+            }
+            alert(resp.data.message)
             
         } catch (error) {
             console.log("signup error: ", error)
